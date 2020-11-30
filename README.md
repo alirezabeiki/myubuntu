@@ -63,13 +63,20 @@ In this repository, I collect Open Source CFD codes.
 ## Applications:
 
 1. Ulauncher:      sudo add-apt-repository ppa:agornostal/ulauncher
+
                    sudo apt update
+
                    sudo apt install ulauncher
+
 2. Steam:          sudo add-apt-repository multiverse
+
                    sudo apt install steam
 3. Etcher:    
+
 4. VPN:            sudo /sbin/modprobe tun
+
                    sudo apt-get install openconnect
+
                    sudo openconnect c1.serverkm.xyz:443
 
                    servers:
