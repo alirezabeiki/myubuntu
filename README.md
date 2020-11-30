@@ -7,8 +7,8 @@
 
 ## Media Player
 
-1. Kodi:     sudo add-apt-repository ppa:team-xbmc/ppa<br/>
-             sudo apt update && sudo apt install kodi
+1. Kodi:  |   sudo add-apt-repository ppa:team-xbmc/ppa<br/>
+          |   sudo apt update && sudo apt install kodi
 2. vlc:      sudo apt-get install vlc
 
 
