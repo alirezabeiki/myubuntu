@@ -62,34 +62,27 @@ In this repository, I collect Open Source CFD codes.
 
 ## Applications:
 
-1. Ulauncher:      sudo add-apt-repository ppa:agornostal/ulauncher
-
-                   sudo apt update
-
-                   sudo apt install ulauncher
-
-2. Steam:          sudo add-apt-repository multiverse
-
-                   sudo apt install steam
+1. Ulauncher:      sudo add-apt-repository ppa:agornostal/ulauncher <br/>
+                   sudo apt update <br/>
+                   sudo apt install ulauncher <br/>
+2. Steam:          sudo add-apt-repository multiverse <br/>
+                   sudo apt install steam <br/>
 3. Etcher:    
+4. VPN:            sudo /sbin/modprobe tun <br/>
+                   sudo apt-get install openconnect <br/>
+                   sudo openconnect c1.serverkm.xyz:443 <br/>
 
-4. VPN:            sudo /sbin/modprobe tun
-
-                   sudo apt-get install openconnect
-
-                   sudo openconnect c1.serverkm.xyz:443
-
-                   servers:
-                   c1.serverkm.xyz:443
-	           c2.serverkm.xyz:443
-	           c3.serverkm.xyz:443
-	           c4.serverkm.xyz:443
-	           c5.serverkm.xyz:443
-	           c6.serverkm.xyz:443
-	           c7.serverkm.xyz:443
-	           c8.serverkm.xyz:443
-	           c9.serverkm.xyz:443
-	           c10.serverkm.xyz:443
+                   servers: <br/>
+                   c1.serverkm.xyz:443 <br/>
+	           c2.serverkm.xyz:443 <br/>
+	           c3.serverkm.xyz:443 <br/>
+	           c4.serverkm.xyz:443 <br/>
+	           c5.serverkm.xyz:443 <br/>
+	           c6.serverkm.xyz:443 <br/>
+	           c7.serverkm.xyz:443 <br/>
+	           c8.serverkm.xyz:443 <br/>
+	           c9.serverkm.xyz:443 <br/>
+	           c10.serverkm.xyz:443 <br/>
 5. Dolphin:   
 6. Virtual Box:
 7. tree:           sudo apt-get install tree
