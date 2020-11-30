@@ -1,13 +1,13 @@
-# CFD Open Source Codes
+# My Ubuntu Apps
 
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat-square)](http://makeapullrequest.com)
 
 
-In this repository, I collect Open Source CFD codes.
+
 
 ## Media Player
 
-1. Kodi:     sudo add-apt-repository ppa:team-xbmc/ppa
+1. Kodi:     sudo add-apt-repository ppa:team-xbmc/ppa<br/>
              sudo apt update && sudo apt install kodi
 2. vlc:      sudo apt-get install vlc
 
@@ -62,8 +62,8 @@ In this repository, I collect Open Source CFD codes.
 
 ## Applications:
 
-1. Ulauncher:      sudo add-apt-repository ppa:agornostal/ulauncher <br/>
-                   sudo apt update <br/>
+1. Ulauncher:      sudo add-apt-repository ppa:agornostal/ulauncher<br/>
+                   sudo apt update<br/>
                    sudo apt install ulauncher <br/>
 2. Steam:          sudo add-apt-repository multiverse <br/>
                    sudo apt install steam <br/>
