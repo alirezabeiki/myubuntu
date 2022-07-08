@@ -1,92 +1,72 @@
-# My Ubuntu Apps
+#A guide for installing Softwares in Ubuntu
 
-[![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat-square)](http://makeapullrequest.com)
-
-
+![](https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQtbz9BVNuvNFXRXMnEz4K52oBPVhyAR6r-_t_5uQPyREZ3DDm7egje9-zXzkPf1d1wTg8&usqp=CAU)
 
 
-## Media Player
 
-1. Kodi:  |   sudo add-apt-repository ppa:team-xbmc/ppa<br/>
-          |   sudo apt update && sudo apt install kodi
-2. vlc:      sudo apt-get install vlc
+**Table of Contents**
 
+[TOCM]
 
-## Editor
+[TOC]
 
-1. vim:         sudo apt-get install vim
-2. genany:      sudo apt-get install geany
-3. Simplenote:  Ubuntu software
-4. Texlive:     sudo apt install texlive-full
+# Media Player
+1.  VLC player
 
-## Graphics Editor
+	`sudo apt-get install vlc`
 
-1. Gimp: sudo apt-get install gimp
+# Editor
+1.  Geany
 
+	`sudo apt-get install geany`
 
-## Video Editin
+2. Vim
 
-1. Kdenlive: sudo apt-get install kdenlive
+	`sudo apt-get install vim`
 
+# Graphics Apps
+1. Gimp
 
-## Workspace browser
+	`sudo apt-get install gimp`
+	
+# System Optimizer
+1.  Stacer
 
-1. Rambox: sudo snap install rambox
+	`sudo apt install stacer`
+	
+# Compiler
+1. Fortran
 
+	`sudo apt-get install gfortran`
+	
+# Miscellaneous
+1. Tree
 
-## System Optimizer
+	`sudo apt-get install tree`
+	
+2. Git
 
-1. Stacer: wget https://jaist.dl.sourceforge.net/project/stacer/v1.1.0/stacer_1.1.0_amd64.deb
-           sudo dpkg -i stacer_1.1.0_amd64.deb           
-           sudo apt install stacer (Ubuntu 20.04)
+	`sudo apt-get install git`
+	
+3. Tweak
 
-## Backup
+	`sudo apt-get install gnome-tweaks`
+	
+4. Font Manager
 
-1. Timeshift: sudo add-apt-repository -y ppa:teejee2008/ppa
-              sudo apt update
-              sudo apt-get install timeshift
+	`sudo apt -y install font-manager`
+	
+5. Telegram
 
-## System software
+	`sudo snap install telegram-desktop`
+	
+6. TexLive
 
-1. Synaptic: sudo apt-get install synaptic
+	`sudo apt install texlive-full`
+	
+7. VPN
 
+	`sudo /sbin/modprobe tun`
+	
+	`sudo apt-get install openconnect`
 
-## CLoud Storage
-
-1. MEGA: 
-
-## Programming Langauges:
-
-1. Fortran:   sudo apt-get install gfortran
-
-
-## Applications:
-
-1. Ulauncher:      sudo add-apt-repository ppa:agornostal/ulauncher<br/>
-                   sudo apt update<br/>
-                   sudo apt install ulauncher <br/>
-2. Steam:          sudo add-apt-repository multiverse <br/>
-                   sudo apt install steam <br/>
-3. Etcher:    
-4. VPN:            sudo /sbin/modprobe tun <br/>
-                   sudo apt-get install openconnect <br/>
-                   sudo openconnect c1.serverkm.xyz:443 <br/>
-
-                   servers: <br/>
-                   c1.serverkm.xyz:443 <br/>
-	           c2.serverkm.xyz:443 <br/>
-	           c3.serverkm.xyz:443 <br/>
-	           c4.serverkm.xyz:443 <br/>
-	           c5.serverkm.xyz:443 <br/>
-	           c6.serverkm.xyz:443 <br/>
-	           c7.serverkm.xyz:443 <br/>
-	           c8.serverkm.xyz:443 <br/>
-	           c9.serverkm.xyz:443 <br/>
-	           c10.serverkm.xyz:443 <br/>
-5. Dolphin:   
-6. Virtual Box:
-7. tree:           sudo apt-get install tree
-8. Git:            sudo apt-get install git
-9. Tweak:          sudo apt-get install gnome-tweaks
-10. Font Manager:  sudo apt -y install font-manager
-11. Telegram:      sudo snap install telegram-desktop
