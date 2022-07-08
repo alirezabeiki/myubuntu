@@ -1,4 +1,4 @@
-#A guide for installing Softwares in Ubuntu
+# A guide for installing Softwares in Ubuntu
 
 ![](https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQtbz9BVNuvNFXRXMnEz4K52oBPVhyAR6r-_t_5uQPyREZ3DDm7egje9-zXzkPf1d1wTg8&usqp=CAU)
 
