@@ -92,7 +92,7 @@
 
 
 
-
+'
 import numpy as np
 import pandas as pd
 
@@ -268,5 +268,5 @@ p = PSO(4, 20)
 x, f, his, hisf = p.run(func, [-20, -20], [21, 21])
 
 
-# hisf2 = np.reshape(hisf, (10,4))
+# hisf2 = np.reshape(hisf, (10,4))'
 
