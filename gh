@@ -1,0 +1,105 @@
+import torch
+import torch.nn.functional as F
+import numpy as np
+import torch.nn as nn
+from sklearn.cluster import KMeans
+
+class HierarchicalSampling(nn.Module):
+    def __init__(self, n_levels, n_clusters, n_points):
+        super(HierarchicalSampling, self).__init__()
+        self.n_levels = n_levels
+        self.n_clusters = n_clusters
+        self.n_points = n_points
+
+        # Initialize k-means clustering algorithm
+        self.kmeans = KMeans(n_clusters=self.n_clusters)
+
+    def forward(self, x):
+        # x is a tensor of shape (batch_size, n_points, n_features)
+
+        # Create list to store the levels of the hierarchy
+        levels = [x]
+
+        # Apply hierarchical sampling recursively
+        for level in range(self.n_levels):
+            # Compute centroids for each subset of points
+            centroids = self.compute_centroids(levels[-1])
+
+            # Partition points based on proximity to centroids
+            assignments = self.assign_points(levels[-1], centroids)
+
+            # Divide points into subsets based on assignments
+            # subsets = self.divide_points(levels[-1], assignments)
+
+            # Add subsets to list of hierarchy levels
+            # levels.append(subsets)
+
+        # Return list of levels
+        return assignments
+
+    def compute_centroids(self, x):
+        # Compute centroids for each subset of points using k-means clustering
+        batch_size, n_points, n_features = x.size()
+        flattened_x = x.view(-1, n_features)
+        labels = self.kmeans.fit_predict(flattened_x)
+        centroids = self.kmeans.cluster_centers_.astype(np.float32)
+        centroids = torch.from_numpy(centroids).to(x.device)
+        repeated_array = np.repeat(centroids[np.newaxis,:], batch_size, axis=0)
+        centroids = repeated_array.reshape(batch_size, self.n_clusters, n_features)
+        return centroids
+
+    def assign_points(self, x, centroids):
+        # Assign each point to the closest centroid
+        distances = torch.cdist(x, centroids)
+        assignments = torch.argmin(distances, dim=2)
+        return assignments
+
+    def divide_points(self, x, assignments):
+        # Divide points into subsets based on assignments
+        batch_size, n_points, n_features = x.size()
+        subsets = []
+        for i in range(self.n_clusters):
+            mask = assignments == i
+            print(mask.shape)
+            subset = x.masked_select(mask.unsqueeze(-1)).view(batch_size, -1, n_features)
+            subsets.append(subset)
+        return torch.stack(subsets, dim=1)
+    
+ 
+
+x = torch.randn(29073, 3)
+n = x.unsqueeze(0).repeat(10, 1, 1)
+    
+    
+f = HierarchicalSampling(2, 11, 2097) 
+    
+    
+    
+assignments = f(n)  
+    
+    
+    
+def get_subset(n):
+    batch_size, n_points, n_features = n.size()
+    subsets = []
+    for i in range(11):
+        mask = assignments == i
+        subset = x.masked_select(mask.unsqueeze(-1)).view(batch_size, -1, n_features)
+        subsets.append(subset)    
+    
+    
+for i in range(4):
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
