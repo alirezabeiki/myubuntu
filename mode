@@ -1,0 +1,241 @@
+import torch.nn as nn
+import torch.nn.functional as F
+import torch
+import numpy as np
+from sklearn.cluster import KMeans
+from tqdm import tqdm as tqdm
+import torch.optim as optim
+from torch.utils.data import DataLoader
+
+
+
+
+class sampling_cluster(nn.Module):
+    def __init__(self):
+        super(sampling_cluster, self).__init__()
+        
+        
+    def get_subset(self, n, assignments, n_cluster):
+        batch_size, n_points, n_features = n.size()
+        subsets = []
+        for i in range(n_cluster):
+            mask = assignments == i
+            subset = n.masked_select(mask.unsqueeze(-1)).view(batch_size, -1, n_features)
+            subsets.append(subset) 
+            
+        return subsets
+
+    def assign_points(self, x, centroids):
+        # Assign each point to the closest centroid
+        distances = torch.cdist(x, centroids)
+        assignments = torch.argmin(distances, dim=2)
+        return assignments
+
+
+    def compute_centroids(self, x, n_clusters):
+        
+        # Compute centroids for each subset of points using k-means clustering
+        batch_size, n_points, n_features = x.size()
+        flattened_x = x.reshape(-1, n_features)
+        kmeans = KMeans(n_clusters=n_clusters)
+        labels = kmeans.fit_predict(flattened_x)
+        centroids = kmeans.cluster_centers_.astype(np.float32)
+        centroids = torch.from_numpy(centroids).to(x.device)
+        repeated_array = np.repeat(centroids[np.newaxis,:], batch_size, axis=0)
+        centroids = repeated_array.reshape(batch_size, n_clusters, n_features)
+        
+        return centroids
+    
+    def forward(self, x):
+        for i in range(3):
+            
+            if i==0:
+                center = self.compute_centroids(x, 11)
+                assignments = self.assign_points(x, center)
+                subsets = self.get_subset(x, assignments, 11)
+                
+            else:
+                new_subsets = []
+                for i in range(len(subsets)):
+                    center = self.compute_centroids(subsets[i], 3)
+                    assignments = self.assign_points(subsets[i], center)
+                    n_subsets = self.get_subset(subsets[i], assignments, 3)
+                    
+                    for i in range(len(n_subsets)):
+                        new_subsets.append(n_subsets[i])
+                        
+                subsets = new_subsets
+                
+        return new_subsets
+    
+
+
+
+class PointNet(nn.Module):
+    def __init__(self, num_points = 29073, num_features=3, latent=20):
+        super(PointNet, self).__init__()
+        
+        self.num_points = num_points
+        self.num_features = num_features
+        self.latent = latent
+        
+        
+        self.conv1 = nn.Conv1d(3, 64, 1)
+        self.conv2 = nn.Conv1d(64, 128, 1)
+        self.conv3 = nn.Conv1d(128, 256, 1)
+
+        self.bn1 = nn.BatchNorm1d(64)
+        self.bn2 = nn.BatchNorm1d(128)
+        self.bn3 = nn.BatchNorm1d(256)
+
+        self.fclatent = nn.Linear(256, self.latent)
+        
+        self.fc1 = nn.Linear(self.latent, 120)
+        self.fc2 = nn.Linear(120, 240)
+        self.fc3 = nn.Linear(240, 512)
+        self.fc4 = nn.Linear(512, 1024)
+        self.fc5 = nn.Linear(1024, self.num_points * self.num_features)
+        
+        self.bnfc1 = nn.BatchNorm1d(120)
+        self.bnfc2 = nn.BatchNorm1d(240)
+        self.bnfc3 = nn.BatchNorm1d(512)
+        self.bnfc4 = nn.BatchNorm1d(1024)
+        
+        self.sampling = sampling_cluster()
+        
+        
+        
+    def Encoder(self, x):
+        
+        x = x.permute(0, 2, 1)        
+        x = F.relu(self.bn1(self.conv1(x)))
+        x = F.relu(self.bn2(self.conv2(x)))
+        x = F.relu(self.bn3(self.conv3(x)))
+        
+        x,_ = torch.max(x, 2)
+        x = x.view(-1, 256)
+        x = self.fclatent(x)
+
+        return x
+    
+        
+    def Decoder(self, input):
+             
+        batchsize = input.size()[0]
+        
+        x = F.relu(self.bnfc1(self.fc1(input)))
+        x = F.relu(self.bnfc2(self.fc2(x)))
+        x = F.relu(self.bnfc3(self.fc3(x)))
+        x = F.relu(self.bnfc4(self.fc4(x)))
+        x = self.fc5(x)
+        
+        x = x.view(batchsize, self.num_features, self.num_points)
+        
+        return x
+                      
+
+    
+    def forward(self, x):
+        
+        x = x.permute(0, 2, 1) 
+        subsets = self.sampling(x)
+        
+        for i in range(len(subsets)):          
+            if i==0:
+                Feature = self.Encoder(subsets[i])
+            else:
+                encod = self.Encoder(subsets[i])
+                Feature = Feature + encod
+            
+        x = self.Decoder(Feature)
+        return x 
+ 
+    
+ 
+model = PointNet()
+
+x = torch.randn(3, 29073)
+x = x.unsqueeze(0).repeat(200, 1, 1)
+
+# output = model(x)
+
+
+
+class AverageMeter(object):
+    """Computes and stores the average and current value"""
+
+    def __init__(self):
+        self.reset()
+
+    def reset(self):
+        self.val = 0
+        self.avg = 0
+        self.sum = 0
+        self.count = 0
+
+    def update(self, val, n=1):
+        self.val = val
+        self.sum += val * n
+        self.count += n
+        self.avg = self.sum / self.count
+        
+
+trainLoader = DataLoader(dataset=x, batch_size=10, shuffle=True)
+
+
+optimizer = optim.Adam(model.parameters(), lr=0.001)
+loss_func = nn.MSELoss()
+        
+model.train()
+loss_train = AverageMeter()
+
+epoch = 10
+
+with tqdm(trainLoader, unit='batch') as tepoch:
+
+    for inputs in tepoch:
+        if epoch is not None:
+            tepoch.set_description(f'Epoch {epoch}')
+
+        inputs = inputs
+
+        outputs = model(inputs)
+        loss = loss_func(outputs, inputs)
+
+        loss.backward()
+        optimizer.step()
+        optimizer.zero_grad()
+       
+        
+        
+      
+        
+        
+        
+        
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+
+
